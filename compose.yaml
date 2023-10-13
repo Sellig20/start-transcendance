@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  # frontend:
+  #   # env_file :
+  #   #   -. .env
+  #   # build:
+  #   #   context : 
+  #   image: node:18-alpine3.17
+  #   container_name: frontend
+  #   volumes:
+  #     - ./frontend/:/front
+  #   restart: always
+  #   # command: "tail -f /dev/null"
+  #   command: "npm install && npm start"
+  #   working_dir: /front
+  #   ports:
+  #     - 3000:3000
+  #    # TODO enter port front fefefe
+
+  backend:
+    # env_file :
+    #   -. .env
+    # build:
+    #   context : 
+    image: node:18-alpine3.17
+    container_name: backend
+    volumes:
+      - ./backend/:/back
+    restart: always
+    # command: "tail -f /dev/null"
+    command: "npm install && npm run start:dev"
+    working_dir: /back
+    ports:
+      - 5000:5000
+     # TODO enter port front fefefe
