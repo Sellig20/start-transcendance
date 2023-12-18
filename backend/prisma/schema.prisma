@@ -1,6 +1,8 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// Rest of your schema.prisma file
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -54,6 +56,7 @@ model Bookmark {
 
   userId Int
   user   User @relation(fields: [userId], references: [id])
-
+  //onDelete: Cascade=> if Bookmark is linked to User and User is first deleted => bookmark explosion => when the parent model of that bookmark is deleted (= User), Bookmark is deleted.
+  //or go into prisma service to not migrate
   @@map("bookmark")
 }
