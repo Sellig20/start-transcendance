@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthDto } from './dto';
-import * as bcrypt from 'bcrypt';
+import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { ForbiddenException } from '@nestjs/common';
 import { JwtService, TokenExpiredError } from '@nestjs/jwt';
@@ -18,8 +18,7 @@ export class AuthService {
   async signup(dto: AuthDto) { 
     //generate the password hash
     // save the new user in the db
-    const saltRounds = 10;
-    const hash = await bcrypt.hash(dto.password, saltRounds);
+    const hash = await argon.hash(dto.password)
     try {
 
         const user = await this.prisma.user.create({
@@ -59,7 +58,7 @@ export class AuthService {
       );
       
       //compare password
-      const pwMatches = await bcrypt.compare(
+      const pwMatches = await argon.verify(
         user.hash, 
         dto.password,
       );
