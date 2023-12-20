@@ -1,12 +1,10 @@
 import { useParams } from 'react-router-dom'
  
 function Survey() {
-    const { questionNumber } = useParams()
  
     return (
         <div>
-            <h1>Questionnaire 🧮</h1>
-            <h2>Question {questionNumber}</h2>
+            <h1>SURVEY</h1>
         </div>
     )
 }
