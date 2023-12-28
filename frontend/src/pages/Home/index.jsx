@@ -5,9 +5,9 @@ import { useEffect } from 'react'
 const Home = () => {
 
     useEffect(() => {
-        console.log("Je fonctionne ?")
         backend.get('/users/me').then((response) => {
-
+            
+            console.log("Je fonctionne ?")
             console.log(response);
         }, (error) => {
             console.log(error)
