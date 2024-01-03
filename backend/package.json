@@ -6,10 +6,11 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "postgre:rm": "docker compose rm postgre -v",
+    "postgre:rm": "docker compose rm postgre -v && yarn rm node modules",
     "postgre:up": "docker compose up postgre",
     "prisma:postgre:deploy": "prisma migrate deploy",
     "postgre:restart": "yarn postgre:rm && yarn postgre:up && yarn prisma:dev:deploy",
+    "rmou:node:modules": "rm -rf node_modules",
     "testpostgre:rm": "docker compose rm testpostgre -s -f -v",
     "testpostgre:up": "docker compose up testpostgre -d",
     "prisma:testpostgre:deploy": "dotenv -e ../.env.test -- prisma migrate deploy",

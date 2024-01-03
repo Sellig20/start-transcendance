@@ -2887,6 +2887,11 @@ nan@^2.14.0, nan@^2.17.0, nan@^2.18.0:
   resolved "https://registry.npmjs.org/nan/-/nan-2.18.0.tgz"
   integrity sha512-W7tfG7vMOGtD30sHoZSSc/JVYiyDPEyQVso/Zz+/uQd0B0L46gtC+pHha5FFMRpil6fm/AoEcRWyOVi4+E/f8w==
 
+nan@~1.1.0:
+  version "1.1.2"
+  resolved "https://registry.npmjs.org/nan/-/nan-1.1.2.tgz"
+  integrity sha512-J7y8XfGMJyLdCesSUmrjwFqK+5Do+TxVthz/lDcfF8olnl3y8pNOw+8yL4mblVSc2DW24n2SyiD736JiVA58Vg==
+
 napi-build-utils@^1.0.1:
   version "1.0.2"
   resolved "https://registry.npmjs.org/napi-build-utils/-/napi-build-utils-1.0.2.tgz"
@@ -3256,6 +3261,13 @@ process@^0.11.10:
   version "0.11.10"
   resolved "https://registry.npmjs.org/process/-/process-0.11.10.tgz"
   integrity sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A==
+
+procps@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.npmjs.org/procps/-/procps-0.4.1.tgz"
+  integrity sha512-013/P/8JN1APjs6hKA2qStMwNseFm7armsKA+UsFZKItFH4I5XP4sWqWFr8s7P5KS5pCEncVGEN6Wal4YFDiLQ==
+  dependencies:
+    nan "~1.1.0"
 
 prop-types@^15.8.1:
   version "15.8.1"

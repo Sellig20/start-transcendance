@@ -48,14 +48,16 @@ services: #quels dockers il doit creer
       - 3000:3000
     #arrivee dans le docker directement a frontend
     working_dir: /frontend
-    #image trouvee sur hub.docker.com en tapant postgre. Choisie au hasard
+    #image trouvee sur hub.docker.com en tapant postgre.et Choisie au hasard
     image: node:21.2-bullseye-slim
     #dossier partage entre mon ordi et le docker
     volumes:
       - ./frontend:/frontend
     restart: always
+
     #commande de debug
     # command: sh -c "tail -f /dev/null"
+
     #commande qui lance mon application dans le docker
     command: sh -c "npm install && npm start"
   
@@ -70,8 +72,10 @@ services: #quels dockers il doit creer
     volumes:
       - ./backend:/backend
     restart: always
-    #commande de debug
+
+    #commande de debugggg
     # command: sh -c "tail -f /dev/null"
+
     #commande qui lance mon serveur dans le docker
     command: sh -c "npm install && npx prisma db push && yarn start dev"
     environment:

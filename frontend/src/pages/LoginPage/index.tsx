@@ -11,6 +11,7 @@ const LoginPage: React.FC = () => {
     // up = sera mise a true grace a usestate plus bas
 
 
+
     // Utiliser le hook useState pour gérer l'état du formulaire
     const [credentials, setCredentials] = useState<Credentials>({
         username: '',
@@ -22,13 +23,12 @@ const LoginPage: React.FC = () => {
             const resp = await axios.post('API 42 !!!!!!!!!!!!!', {
                 // username,
                 // password,
-                //envoie du post avec les infos 
             });
 
             setIsAuthenticated(true);
         }
         catch (error) {
-            console.log("ERROR: AUTHENTIFICATION FAILED");
+            console.log("ERROR AUTHENTIFICATION")
         }
     }
 
@@ -43,7 +43,7 @@ const LoginPage: React.FC = () => {
 
     // Fonction pour gérer la soumission du formulaire
     const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();//empeche le comp par defaut du formulaire qui rafraichit la page
+        e.preventDefault();
         // Ajoutez ici la logique d'authentification en utilisant les informations d'identification
         console.log('Credentials submitted:', credentials);
     };
