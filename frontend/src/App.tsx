@@ -4,6 +4,7 @@ import Survey from './pages/Survey/index'
 import Header from './components/Header'
 import Error from './components/Error/index'
 import LoginPage from './pages/LoginPage/index'
+import PongGame from './pages/PongGame/index'
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/survey" element={<Survey />} />
           <Route path="/LoginPage" element={<LoginPage />} />
+          <Route path="/PongGame" element={<PongGame />} />
           <Route path="*" element={<Error />} />
           {/*toutes celles qui ne sont pas declarees juste au dessus sont en error  */}
         </Routes>
