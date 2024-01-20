@@ -2,6 +2,9 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { IoAdapter } from '@nestjs/platform-socket.io';
+import { join } from 'path';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,6 +22,7 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api-docs', app, document);
+
 
   app.enableCors();
   app.useGlobalPipes(

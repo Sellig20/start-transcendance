@@ -1,4 +1,16 @@
-import ReactDOM from 'react-dom'
+// import ReactDOM from 'react-dom'
+
+// ReactDOM.render(<App />, document.getElementById('root'));
+
+import React from 'react';
+import { createRoot } from 'react-dom/client';
 import App from './App'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+// Créez un élément racine à l'aide de createRoot
+const root = createRoot(document.getElementById('root') as HTMLElement);
+
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+);

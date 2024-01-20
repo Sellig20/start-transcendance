@@ -1,5 +1,7 @@
 import './style.css'
 import React, { useEffect } from 'react';
+import PGame from '../../components/PGame/index';
+
 
 const PongGame: React.FC = () => {
 
@@ -28,6 +30,7 @@ const PongGame: React.FC = () => {
         let ballYDirection = 0;
         let player1Score = 0;
         let player2Score = 0;
+
         let paddle1 = {
             width: 25,
             height: 100,
@@ -74,6 +77,7 @@ const PongGame: React.FC = () => {
             <canvas id="gameBoard" width="500" height="500"></canvas>
             <div id="scoreText">0 : 0</div>
             <button id="resetButton">Reset</button>
+            <PGame />
 
         </div>
     )
