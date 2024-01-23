@@ -1,25 +1,10 @@
 import { useEffect, useState } from 'react';
 import io, { Socket } from 'socket.io-client';
+import { socket } from '../../contexts/WebsocketContext';
 
     const PGame = () => {
         const [message, setMessage] = useState('');
         const [newSocket, setSocket] = useState<Socket | null>(null)
-
-        useEffect(() => {
-            const socket = io('http://localhost:3000/ponggame'); // Remplacez l'URL par votre URL de serveur NestJS
-            
-            // Gérer les événements du côté client, par exemple :
-            socket.on('message', (data) => {
-                console.log('Message from server:', data);
-            });
-
-            setSocket(socket);
-            
-            return () => {
-                // Déconnexion du WebSocket lorsque le composant est démonté
-                socket.disconnect();
-            };
-        }, []);
     
         const sendMessage = () => {
             if (newSocket) {
