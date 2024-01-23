@@ -4,8 +4,8 @@ import { Server } from 'socket.io';
 
 @WebSocketGateway({
     cors: {
-        origin: ['htpp://localhost:3000/ponggame'],
-    }
+        origin: ['http://localhost:3000'],
+    },
 })
 export class MyGateway implements OnModuleInit {
 

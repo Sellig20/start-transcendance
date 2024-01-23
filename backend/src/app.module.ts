@@ -10,7 +10,7 @@ import { AppService } from './app.service';
 import { SocketModule } from './socket/socket.module';
 
 @Module({
-  imports: [SocketModule],
+  imports: [gatewayModule],
   controllers: [AppController],
   providers: [AppService],
   // imports: [
