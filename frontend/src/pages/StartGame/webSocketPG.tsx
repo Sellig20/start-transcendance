@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import { WebsocketContext } from "../../contexts/WebsocketContext"
 
-
 export const WebSocketPG = () => {
 
     const [value, setValue] = useState('');

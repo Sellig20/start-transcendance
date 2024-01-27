@@ -5,10 +5,13 @@ import Survey from './pages/Survey/index'
 // import Header from './components/Header'
 import Error from './components/Error/index'
 import LoginPage from './pages/LoginPage/index'
-import PongGame from './pages/PongGame/index'
+import GameGate from './pages/GameGate/index'
+import StartGame from './pages/StartGame/index'
 // import io from 'socket.io-client';
 import { socket, WebsocketProvider } from './contexts/WebsocketContext';
-import { WebSocketPG } from './components/PGame/webSocketPG';
+import { WebSocketPG } from './pages/StartGame/webSocketPG';
+import QueueGate from './pages/QueueGate/index'
+import WebsocketQG from './pages/QueueGate/websocketQG'
 
   const App = () => {
     // useEffect(() => {
@@ -27,12 +30,25 @@ import { WebSocketPG } from './components/PGame/webSocketPG';
           <Route path="/" element={<Home />} />
           <Route path="/survey" element={<Survey />} />
           <Route path="/LoginPage" element={<LoginPage />} />
-          <Route path="/PongGame" 
+          <Route path="/GameGate" 
             element={
               <WebsocketProvider value={socket}>
-                <WebSocketPG />
-                <PongGame />
-                </WebsocketProvider>
+                <div>
+                  <WebSocketPG />
+                  <GameGate />
+                </div>
+              </WebsocketProvider>
+            }
+          />
+          <Route path="/StartGame" element={<StartGame />} />
+          <Route path="/QueueGate" 
+            element={
+              <WebsocketProvider value={socket}>
+                <div>
+                  <WebsocketQG pageId={"10"}/>
+                  <QueueGate />
+                </div>
+              </WebsocketProvider>
             }
           />
           <Route path="*" element={<Error />} />
