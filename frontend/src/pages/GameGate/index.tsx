@@ -1,15 +1,26 @@
 import './style.css'
 import React, { useEffect } from 'react';
 import PGame from '../../components/PGame/index';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const GameGate: React.FC = () => {
+
+    const navigate = useNavigate();
+    // const [forceUpdate, setForceUpdate] = useState(false);
+
+    const handleRedirectToQueueGate = () => {
+        navigate('../QueueGate');
+    }
+    
+    // const handleForceUpdate = () => {
+    //     setForceUpdate(prevState => !prevState);
+    // }
 
     return (
         <div id="gameGate">
             <h1>PONG GAME</h1>
-            <PGame />
-            <Link to="/StartGame">Jouer au jeu zozo = faire la queue</Link>
+            <button onClick={handleRedirectToQueueGate}>QueueGateuh</button>
+            {/* <Link to="../QueueGate">Got to</Link> */}
             <br></br>
             <Link to="/">Quitter le gaaaame</Link>
         </div>

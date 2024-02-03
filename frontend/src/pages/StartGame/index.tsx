@@ -1,84 +1,27 @@
-import React, { useEffect } from 'react';
-import { socket } from '../../contexts/WebsocketContext';
+import React, { useContext, useEffect, useState } from 'react';
+import './index.css';
 
-
-const StartGame: React.FC = () => {
-
-const gameBoard = document.querySelector("#gameBoard") as HTMLCanvasElement | null;;
-const resetButton = document.querySelector("resetBtn");
-const scoreText = document.querySelector("#scoreText");
-
-if (gameBoard)
-{
-    const ctx = gameBoard.getContext("2d");
-    const gameWidth = gameBoard.width;
-    const gameHeight = gameBoard.height;
-    const boardBackground = "forestgreen";
-    const paddle1Color = "lightblue";
-    const paddle2Color = "red";
-    const paddleBorder = "black";
-    const BallColor = "yellow";
-    const ballBorderColor = "black";
-    const ballRadius = 12.5;
-    const paddleSpeed = 50;
-    let intervalID;
-    let ballSpeed = 1;
-    let ballX = gameWidth / 2;
-    let ballY = gameHeight / 2;
-    let ballXDirection = 0;
-    let ballYDirection = 0;
-    let player1Score = 0;
-    let player2Score = 0;
-
-    let paddle1 = {
-        width: 25,
-        height: 100,
-        x: 0,
-        y: 0
-    }
-    let paddle2 = {
-        width: 25,
-        height: 100,
-        x: gameWidth - 25,
-        y: gameHeight - 100
-    }
-    
+interface PaddleProps {
+  position: number;
 }
-    
-    useEffect(() => {
-    window.addEventListener("keydown", changeDirection);
-    resetButton?.addEventListener("click", resetGame);
 
-    gameStart();
+const Paddle: React.FC<PaddleProps> = ({ position }) => (
+  <div className="paddle" style={{ left:position }}>
+    Paddle
+  </div>
+)
 
-    return () => {
-        window.removeEventListener("keydown", changeDirection);
-        resetButton?.removeEventListener("click", resetGame);
-    };
-}, []);
+interface StartGameProps {
+  size: number;
+}
 
-    gameStart();
+const StartGame: React.FC<StartGameProps> = ({ size }) => {
 
-    function gameStart(){};
-    function nextTick(){};
-    function clearBoard(){};
-    function drawPaddles(){};
-    function createBall(){};
-    function moveBall(){};
-    function checkCollision(){};
-    function changeDirection(){};
-    function updateScore(){};
-    function resetGame(){};
-
-    return (
-        <nav>
-            <h1>StartGame JEUUUUUUUU</h1>
-            <canvas id="gameBoard" width="500" height="500"></canvas>
-            <div id="scoreText">0 : 0</div>
-            <button id="resetButton">Reset</button>
-        </nav>
-    )
-
+  return (
+      <nav>
+          <h1>StartGame JEUUUUUUUU</h1>
+      </nav>
+  )
 }
 
 export default StartGame;

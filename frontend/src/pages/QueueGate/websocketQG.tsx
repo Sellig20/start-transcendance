@@ -1,57 +1,124 @@
+// import { useContext, useEffect, useState } from "react"
+// import { WebsocketContext } from "../../contexts/WebsocketContext"
+// import { useNavigate } from 'react-router-dom';
+// import { SlowBuffer } from "buffer";
+// import { Server } from "http";
+
+// interface User {
+//     clientId: string;
+//     // Ajoutez d'autres propriétés nécessaires ici
+// }
+
+// const WebsocketQG = () => {
+
+//     const socket = useContext(WebsocketContext);
+//     const [connectedUsers, setConnectedUsers] = useState<User[]>([]);
+
+//     useEffect(() => {
+
+//         console.log("composant monté pour queue list");
+//         console.log('Socket connected:', socket.connected);
+
+//         const handleConnect = () => {
+//             console.log('Connected in Queue list!');
+//         }
+        
+//         const handleConnection = ({ clientId, userArray}: { clientId: string, userArray: any[] }) => {
+//             console.log(`User react -> ${clientId} | User array react -> ${userArray}`)
+//             setConnectedUsers(userArray);
+//         };
+        
+//         const handleDisconnection = ({ clientId, userArray}: { clientId: string, userArray: any[] }) => {
+//             console.log(`User disconnect react -> ${clientId} | User disconnect array react -> ${userArray}`)
+//             setConnectedUsers(userArray);
+//         };
+        
+//         socket.on('connect', handleConnect);
+//         socket.on('user-connected', handleConnection);
+//         socket.on('user-disconnected', handleDisconnection);
+        
+//         return () => {
+//             socket.off('connect', handleConnect);
+//             socket.off('user-connected', handleConnection);
+//             socket.off('user-disconnected', handleDisconnection);
+//         };
+        
+//     }, []);
+//     return (
+//         <div>
+//             <h1> websocket QG</h1>
+//             <h2>Utilisateurs connectés :</h2>
+//             <ul>
+//                 {connectedUsers.map((item) => (
+//                     <li key={item.clientId}>{item.clientId}</li>
+//                 ))}
+//             </ul>
+//         </div>
+//     )
+
+// }
+
+// const Banner = ({ message }: { message: string }) => (
+//     <div style={{ backgroundColor: 'red', color: 'white', padding: '10px' }}>
+//         {message}
+//     </div>
+//     );
+
+
+// export default WebsocketQG;
+
+
 import { useContext, useEffect, useState } from "react"
 import { WebsocketContext } from "../../contexts/WebsocketContext"
 
 
-const WebsocketQG = ({ pageId }: { pageId: "10" }) => {
+const WebsocketQG = () => {
 
     const socket = useContext(WebsocketContext);
-    const [connectedUsers, setConnectedUsers] = useState<string[]>([]);
-    console.log("debug1");
+    const [userArray, setUserArray] = useState<string[]>([]);
+
     useEffect(() => {
+        if (socket.connected)
+        {
+            console.log(`je suis ${socket.id} dans queue gate .tsx`);
+        }
 
-        socket.emit('joinPage', pageId);
+        const handleConnect = () => {
+            console.log('Connected in QUEUE GAME!');
+        }
 
-        console.log("debug2");
-        socket.on('user-connected', ({ clientId, userArray}) => {
-            console.log(`Connected on QUEUE GATE for ${clientId}`);
-            // console.log('Tab add ===>', userArray);
-            setConnectedUsers((prevUsers) => [...prevUsers, clientId]);
-            console.log("------------------>>>>>>>>>", userArray);
-            localStorage.setItem('connectedUsers', JSON.stringify(userArray));
+        socket.on('connect', handleConnect);
 
-        });
+        const handleUserCo = ({ clientId, userArray }: { clientId: string; userArray: string[] }) => {
+            console.log(`User connected: ${clientId}`);
+            console.log(`Updated user array: ${userArray}`);
+            setUserArray(userArray);
+            console.log("Tab => ", userArray);
+        }
+
+        socket.on('user-connected', handleUserCo);
         
-        socket.on('pageStatus', ({ usersOnPage }) => {
-            // setConnectedUsers(usersOnPage);
-            setConnectedUsers(prevUsers => Array.from(new Set([...prevUsers, usersOnPage])));
-            localStorage.setItem('connectedUsers', JSON.stringify(usersOnPage));
+        socket.on('updateUA', ({ userArray: updateUA }) => {
+            setUserArray(updateUA);
         })
 
         socket.on('user-disconnected', ({ clientId, userArray}) => {
-            console.log(`User disconnected: ${clientId}`);
-            // console.log('Tab remove ===>', userArray);
-            // setConnectedUsers((prevUsers) => prevUsers.filter((userId) => userId !== data.clientId));
-            // setConnectedUsers(userArray);
+            console.log(`user array ${userArray}`);
         });
 
-        const storedUsers = localStorage.getItem('connectedUsers');
-        if (storedUsers) {
-            const parsedUsers = JSON.parse(storedUsers);
-            setConnectedUsers(parsedUsers);
-        }
-
         return () => {
-            socket.off();
+            socket.off('user-connected');
+            socket.off('updateUA');
+            socket.off('user-disconnect');
         };
 
-    }, [pageId]);
-    console.log("debug3");
+    }, [socket]);
     return (
         <div>
-            <h2>Connected Users on {pageId}</h2>
+            <h2>Connected Users</h2>
             <ul>
-                {connectedUsers.map((usersOnPage, index) => (
-                    <li key={index}>{usersOnPage}</li>
+                {userArray.map((user, index) => (
+                    <li key={index}>{user}</li>
                 ))}
             </ul>
         </div>
@@ -60,5 +127,3 @@ const WebsocketQG = ({ pageId }: { pageId: "10" }) => {
 }
 
 export default WebsocketQG;
-
-

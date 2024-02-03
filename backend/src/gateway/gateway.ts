@@ -94,6 +94,10 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection<Socket>, OnG
         console.log("Le client connecte est -> ", client.id);
         this.addUser(client.id);
         this.sendUAEvent();
+
+        const userIndex = this.userArray.indexOf(client.id);
+        this.server.to(client.id).emit('yourUserId', userIndex + 1);
+
         this.server.emit('user-connected', { clientId: client.id, userArray: this.userArray});
         this.displayUserArray();
     }
@@ -132,6 +136,12 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection<Socket>, OnG
 
     getConnectedUsers(): string[] {
         return Array.from(this.userArray);
+    }
+
+    @SubscribeMessage('UpdatePosition')
+    handleUpdatePos(client: Socket, data: { key: string }) {
+        console.log("Le serveur apprend que le client a bougé son paddle");
+        client.emit('PositionUpdatedInServer', { message: 'Server received updated position'});
     }
            
     @SubscribeMessage('keydown')
