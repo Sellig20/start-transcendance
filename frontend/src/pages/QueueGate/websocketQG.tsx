@@ -70,7 +70,7 @@
 
 import { useContext, useEffect, useState } from "react"
 import { WebsocketContext } from "../../contexts/WebsocketContext"
-
+import React from 'react';
 
 const WebsocketQG = () => {
 

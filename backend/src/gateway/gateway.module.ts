@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common'
+import { TableauModule } from '../tableau/tableau.module';
 import { MyGateway } from './gateway';
 
 @Module({
+    imports: [TableauModule],
     providers: [MyGateway],
 })
  

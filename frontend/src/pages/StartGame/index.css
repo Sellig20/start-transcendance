@@ -1,39 +1,9 @@
-.game-container {
-    position: relative;
-    width: 700px; /* Ajustez la largeur selon vos besoins */
-    height: 500px; /* Ajustez la hauteur selon vos besoins */
-    margin: auto;
-    border: 2px solid #333;
-  }
-  
-  .game-board {
-    display: grid;
-    /* grid-template-columns: repeat(10, 1fr); Ajustez le nombre de colonnes selon vos besoins */
-    /* grid-template-rows: repeat(10, 1fr); Ajustez le nombre de lignes selon vos besoins */
-    width: 100%;
-    height: 100%;
-  }
-  
-  .row {
-    display: flex;
-    width: 100%;
-  }
-  
-  .cell {
-    flex: 1;
-    border: 1px solid #ddd;
-    box-sizing: border-box;
-    height: 100%;
-  }
-  
-  .paddle {
-    position: absolute;
-    width: 22px; /* Ajustez la largeur du paddle selon vos besoins */
-    height: 90px; /* Ajustez la hauteur du paddle selon vos besoins */
-    background-color: #333;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-  }
+body {
+  text-align: center;
+}
+
+#board {
+  background-color: black;
+  border-top: 5px solid skyblue;
+  border-bottom: 5px solid skyblue;
+}

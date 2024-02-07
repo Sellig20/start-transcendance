@@ -1,5 +1,6 @@
 import backend from '../../axios/backend'
 import { useEffect } from 'react'
+import React from 'react';
  
 const Home = () => {
 

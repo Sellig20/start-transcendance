@@ -1,54 +1,7 @@
-// import { useContext, useEffect, useState } from "react"
-// import { WebsocketContext } from "../../contexts/WebsocketContext"
-
-// export const WebSocketPG = () => {
-
-//     const socket = useContext(WebsocketContext);
-
-    
-//     useEffect(() => {
-
-//         const handleConnect = () => {
-//                 console.log('Connected in Game Gate!');
-//         }
-
-//         const handleKeyDown = (event: any) => {
-//             if (event.key === 'ArrowLeft') {
-//                 console.log('ARROW LEFT');
-//                 socket.emit('keydown', { direction: 'left'});
-//             }
-//             else if (event.key === 'ArrowRight') {
-//                 console.log('ARROW RIGHT');
-//                 socket.emit('keydown', { direction: 'right'});
-//             }
-//         }
-
-//         socket.on('connect', handleConnect);
-    
-//         window.addEventListener('keydown', handleKeyDown);
-        
-//         return () => {
-//             console.log("Unregistering events...");  
-//             socket.off('connect');
-//             window.removeEventListener('keydown', handleKeyDown);
-//         }
-
-//     }, []);
-
-//     return (
-//         <div>
-//             <div>
-//                 <h1>Websocket PG</h1>
-//             </div>
-//         </div>
-//     )
-// }
-
-// export default WebSocketPG;
-
-
 import { useContext, useEffect, useState } from "react"
 import { WebsocketContext } from "../../contexts/WebsocketContext"
+import React from 'react';
+
 
 export const WebSocketPG = () => {
 
@@ -78,11 +31,7 @@ export const WebSocketPG = () => {
         <div>
             <div>
                 <h1>Websocket Component</h1>
-                <input 
-                    type="text" 
-                    value={value} 
-                    onChange={(e) => setValue(e.target.value)}
-                />
+                
             </div>
         </div>
     )

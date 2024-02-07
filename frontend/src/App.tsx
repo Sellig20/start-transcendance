@@ -8,6 +8,7 @@ import { socket, WebsocketProvider } from './contexts/WebsocketContext';
 import { WebSocketPG } from './pages/GameGate/webSocketPG';
 import { WebsocketSG } from './pages/StartGame/websocketSG';
 import QueueGate from './pages/QueueGate/index'
+import React from 'react';
 
   const App = () => {
 
