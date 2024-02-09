@@ -1,0 +1,24 @@
+
+{/* <div className="pong-game-container">
+            <div className="paddle" style={{ top: `${paddle1Pos * 10}%`, left: 0 }}>
+            Paddle 1
+            </div>
+
+            <div className="paddle" style={{ bottom: `${paddle2Pos * 10}%`, right: 0 }}>
+            Paddle 2
+            </div>
+
+            {/* <div className="ball" style={{ top: `${ballY * 10}%`, left: `${ballX * 10}%` }}>
+            Ball
+            </div> */}
+
+            // <div className="game-board-container">
+            // {localGameBoard.map((row, rowIndex) => (
+            //     <div key={rowIndex} className="row">
+            //     {row.map((cell, colIndex) => (
+            //         <div key={colIndex} className={`cell${cell === 1 ? ' player-paddle' : cell === 2 ? ' opponent-paddle' : cell === 3 ? ' ball' : ''}`}></div>
+            //     ))}
+            //     </div>
+            // ))}
+            // </div>
+       // </div> */}

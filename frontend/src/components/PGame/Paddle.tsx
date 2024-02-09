@@ -7,8 +7,6 @@ export interface PaddleType {
   height: number;
   velocityY: number;
 }
-
-
 interface PaddleProps {
   paddle: PaddleType; // Utilisez l'interface Paddle comme type pour la propriété paddle
 }

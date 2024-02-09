@@ -2,21 +2,22 @@ import { useContext, useEffect, useState } from "react"
 import React from 'react';
 import { WebsocketContext } from "../../contexts/WebsocketContext"
 import Paddle, { PaddleType } from '../../components/PGame/Paddle'
-import { all } from "axios";
+import axios from 'axios';
 
 type GameBoard = number[][];
 
 let boardWidth = 500;
 let boardHeight = 500;
-let context; 
 
-//players
 let playerWidth = 10;
 let playerHeight = 50;
 let playerVelocityY = 0;
 
 let ballWidth = 10;
 let ballHeight = 10;
+
+let player1Score = 0;
+let player2Score = 0;
 
 export const WebsocketSG = () => {
 
@@ -58,6 +59,24 @@ export const WebsocketSG = () => {
             a.y < b.y + b.height &&
             a.y + a.height > b.y;
     }
+    const resetBall = (direction: number) => {
+        ball.x = boardWidth / 2 - ball.width / 2; // Replace la balle au centre horizontalement
+        ball.y = boardHeight / 2 - ball.height / 2;
+        ball.width =   ballWidth;
+        ball.height = ballHeight; // Replace la balle au centre verticalement
+        ball.velocityX = direction;
+        ball.velocityY = 2;
+      };
+
+    // const detect = (ball: Ball, paddle: Paddle): boolean => {
+    //     return (
+    //       ball.x < paddle.x + paddle.width &&
+    //       ball.x + ball.width > paddle.x &&
+    //       ball.y < paddle.y + paddle.height &&
+    //       ball.y + ball.height > paddle.y
+    //     );
+    //   };
+    // const initiateGame = () => {}
 
     const update = () => {
         const board = document.getElementById("board") as HTMLCanvasElement | null;
@@ -85,21 +104,56 @@ export const WebsocketSG = () => {
                 if (ball.y <= 0 || ball.y + ball.height >= boardHeight) {
                     ball.velocityY = -ball.velocityY;
                 }
+
+                let ballHitPaddle = false;
                 
                 if (detect(ball, paddle1)) {
                     if (ball.x <= paddle1.x + paddle1.width) {
                         ball.velocityX *= -1;
+                        ballHitPaddle = true;
                     }
                 }
                 else if (detect(ball, paddle2)) {
                     if (ball.x + ballWidth >= paddle2.x) {
                         ball.velocityX *= -1;
+                        ballHitPaddle = true;
                     }
+                }
+
+                if (ball.x < 0 && !ballHitPaddle) {
+                    player2Score++;
+                    resetBall(1);;
+                }
+                else if (ball.x + ballWidth > boardWidth && !ballHitPaddle) {
+                    player1Score++;
+                    resetBall(-1);
+                }
+
+                context.font = "45px sans-serif";
+                context.fillText(player1Score.toString(), boardWidth / 5, 45);
+                context.fillText(player2Score.toString(), boardWidth * 4 / 5 - 45, 45);
+
+                for (let i = 10; i < board.height; i += 25) {
+                    context.fillRect(board.width / 2 - 10, i, 5, 5);
                 }
             }
             requestAnimationFrame(update);
         }
     };
+
+
+    interface GameBoardType {
+        // Définissez la structure de votre tableau ici
+        // Par exemple, un tableau bidimensionnel de nombres
+        [key: string]: number[];
+      }
+    const [gameBoard, setGameBoard] = useState<GameBoardType>({});
+
+
+
+
+
+
 
     useEffect(() => {
 
@@ -118,7 +172,14 @@ export const WebsocketSG = () => {
 
 
 
-
+        axios.get('http://localhost:3001/StartGame')
+      .then(response => {
+        const receivedGameBoard: GameBoardType = response.data.gameBoard;
+        setGameBoard(receivedGameBoard);
+      })
+      .catch(error => {
+        console.error('Error fetching game board:', error);
+      });
 
 
 
@@ -224,45 +285,22 @@ export const WebsocketSG = () => {
     }, []);
 
     return (
+        // <div className="game-container">
+        //     <canvas id="board"></canvas>
+        // </div>
         <div className="game-container">
-            <canvas id="board"></canvas>
+      {/* Utiliser gameBoard pour afficher le tableau dans votre composant */}
+      {Object.keys(gameBoard).map((rowKey, rowIndex) => (
+        <div key={rowIndex} className="board-row">
+          {gameBoard[rowKey].map((cell, colIndex) => (
+            <div key={colIndex} className="board-cell">
+              {cell}
+            </div>
+          ))}
         </div>
-    )
+      ))}
+    </div>
+  );
 }
 
 export default WebsocketSG;
-
-
-
-
-
-
-
-
-
-
-
-
-{/* <div className="pong-game-container">
-            <div className="paddle" style={{ top: `${paddle1Pos * 10}%`, left: 0 }}>
-            Paddle 1
-            </div>
-
-            <div className="paddle" style={{ bottom: `${paddle2Pos * 10}%`, right: 0 }}>
-            Paddle 2
-            </div>
-
-            {/* <div className="ball" style={{ top: `${ballY * 10}%`, left: `${ballX * 10}%` }}>
-            Ball
-            </div> */}
-
-            // <div className="game-board-container">
-            // {localGameBoard.map((row, rowIndex) => (
-            //     <div key={rowIndex} className="row">
-            //     {row.map((cell, colIndex) => (
-            //         <div key={colIndex} className={`cell${cell === 1 ? ' player-paddle' : cell === 2 ? ' opponent-paddle' : cell === 3 ? ' ball' : ''}`}></div>
-            //     ))}
-            //     </div>
-            // ))}
-            // </div>
-       // </div> */}

@@ -112,8 +112,6 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection<Socket>, OnG
         console.log("-------------------------------");
     }
     
-    
-    
     handleConnection(client: Socket, ...args: any[]) {
         console.log("Le client connecte est -> ", client.id);
         this.addUser(client.id);
@@ -132,9 +130,6 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection<Socket>, OnG
         this.sendUAEvent();
     }
 
-
-
-    
     private addUser(item: string): void {
         this.userArray.push(item);
         const index = this.userArray.indexOf(item);

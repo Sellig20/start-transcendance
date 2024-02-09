@@ -12,9 +12,5 @@ export class TableauController {
   getGameBoard(): number[][] {
     return this.tableauService.getGameBoard();
   }
-
-  // updatePaddlePositions(positionPaddle1: number, positionPaddle2: number) {
-  //   this.server.emit('updatePaddles', { positionPaddle1, positionPaddle2 });
-  // }
-    
+  
 }
