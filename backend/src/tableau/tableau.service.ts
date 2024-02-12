@@ -29,4 +29,6 @@ export class TableauService {
   onGameBoardUpdated(callback: (board: number[][]) => void): void {
     this.eventEmitter.on('gameBoardUpdated', callback);
   }
+  
 }
+

@@ -9,6 +9,8 @@ import { join } from 'path';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.useWebSocketAdapter(new IoAdapter(app));
+
   const options = new DocumentBuilder()
     .setTitle('the wonderful world of juana')
     .setDescription('unicorns only')
