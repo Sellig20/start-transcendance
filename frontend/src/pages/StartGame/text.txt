@@ -464,3 +464,501 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const setPaddle1Posi = (e : KeyboardEvent) => {
+            if (e.code == "ArrowUp") {
+                paddle1.velocityY = -3;
+            }
+            else if (e.code == "ArrowDown") {
+                paddle1.velocityY = 3;
+            }
+        }
+        
+        const setPaddle2Posi = (e :KeyboardEvent) => {
+            if (e.code == "ArrowUp") {
+                paddle2.velocityY = -3;
+            }
+            else if (e.code == "ArrowDown") {
+                paddle2.velocityY = 3;
+            }
+        }
+        
+        const handleKeyDown = (event: KeyboardEvent) => {
+            
+            if (event.key === 'ArrowUp') {
+                if (userId === 1) {
+                    // setPaddle1Posi(event);
+                        socket.on('paddle1Moved', (newVelocityY) => {
+                        makeMovePaddle1(newVelocityY);
+                    })
+                    console.log(`Arrow UP by ${userId}`);
+                    // socket.emit('keyup', { direction: 'ArrowUp'});
+                    socket.emit('keyup', { key: event.code })
+                    
+                } else if (userId === 2) {
+                    setPaddle2Posi(event);
+                    console.log(`Arrow UP by ${userId}`);
+                    // socket.emit('keyup', { direction: 'Arrowup'});
+                    socket.emit('keyup', { key: event.code })
+                }
+            }
+            else if (event.key === 'ArrowDown') {
+                if (userId === 1) {
+                    setPaddle1Posi(event);
+                    console.log(`Arrow DOWN by ${userId}`);
+                    socket.emit('keydown', { direction: 'Arrowdown'});
+                } else if (userId === 2) {
+                    setPaddle2Posi(event);
+                    console.log(`Arrow DOWN by ${userId}`);
+                    socket.emit('keydown', { direction: 'Arrowdown'});
+                }
+            }
+        }; 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           // const initiatePaddle1OLD = (context: CanvasRenderingContext2D) => {
+    //     paddle1.y += paddle1.velocityY;
+    //     // console.log("paddle velocity Y ", paddle1.velocityY);
+    //     // console.log("paddle 1 y premier = ", paddle1.y);
+    //     paddle1.y = Math.max(0, Math.min(boardHeight - paddle1.height, paddle1.y));
+    //     // console.log("paddle 1 y deuxieme = ", paddle1.y);
+    //     context.fillRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height);
+    // }
+
+
+
+
+    const [paddle1, setPaddle1] = (useState(gameState.paddle1));
+    //     x: 10,
+    //     y: gameStateX.paddle1.boardHeight / 2,
+    //     width: playerWidth,
+    //     height: playerHeight,
+    //     velocityY: playerVelocityY,
+    // );
+    
+    const [paddle2, setPaddle2] = (useState(gameState.paddle2))
+    //     x: boardWidth - playerWidth - 10,
+    //     y: boardHeight / 2,
+    //     width: playerWidth,
+    //     height: playerHeight,
+    //     velocityY: playerVelocityY,
+    // );
+
+    const [ball, setBall] = (useState(gameState.ball))
+    //     x: boardHeight / 2,
+    //     y: boardHeight / 2,
+    //     width: ballWidth,
+    //     height: ballHeight,
+    //     velocityX: 1,
+    //     velocityY: 2,
+    //     color: "violet"
+    // )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    import { useContext, useEffect, useState, useRef } from "react"
+import React from 'react';
+import { WebsocketContext } from "../../contexts/WebsocketContext"
+import Paddle, { PaddleType } from '../../components/PGame/Paddle'
+import axios from 'axios';
+import { CreateContextOptions } from "vm";
+import { BallType, GameStateFD } from "./GameStateFD";
+import { SocketAddress } from "net";
+
+// import { Ball, BallType } from '../../../../backend/src/Game/Ball'
+
+// let boardWidth = 500;
+// let boardHeight = 500;
+
+// let playerWidth = 10;
+// let playerHeight = 50;
+// let playerVelocityY = 0;
+
+// let ballWidth = 10;
+// let ballHeight = 10;
+
+// let player1Score = 0;
+// let player2Score = 0;
+
+export const WebsocketSG = () => {
+
+    const [serverMessage, setServerMessage] = useState('');
+    const [serverAMessage, setAServerMessage] = useState('');
+    const [canvasContext, setCanvasContext] = useState<CanvasRenderingContext2D | null>(null);
+    const socket = useContext(WebsocketContext);
+    const canvasContextRef = useRef<CanvasRenderingContext2D | null>(null);
+    const [gameState, setGameState2] = useState<GameStateFD>(new GameStateFD());
+
+    // const [paddle1, setPaddle1] = (useState(gameState.paddle1));
+    
+    // const [paddle2, setPaddle2] = (useState(gameState.paddle2))
+
+    // const [ball, setBall] = (useState(gameState.ball))
+
+    function detect(a: any, b: any) {
+        // return a.x < b.x + b.width &&
+        //     a.x + a.width > b.x &&
+        //     a.y < b.y + b.height &&
+        //     a.y + a.height > b.y;
+    }
+
+    const resetBall = (direction: number) => {
+        // gameState.ball.x = gameState.boardWidth / 2 - gameState.ball.width / 2; // Replace la balle au centre horizontalement
+        // gameState.ball.y = gameState.boardHeight / 2 - gameState.ball.height / 2;
+        // gameState.ball.width = gameState.ballWidth;
+        // gameState.ball.height = gameState.ballHeight; // Replace la balle au centre verticalement
+        // gameState.ball.velocityX = direction;
+        // gameState.ball.velocityY = 2;
+        // gameState.ball.color = "grey"
+      };
+
+    const detectigBall = (ballHitPaddle: boolean) => {
+        // if (detect(gameState.ball, gameState.paddle1)) {
+        //     if (gameState.ball.x <= gameState.paddle1.x + gameState.paddle1.width) {
+        //         gameState.ball.velocityX *= -1;
+        //         ballHitPaddle = true;
+        //     }
+        // }
+        // else if (detect(gameState.ball, gameState.paddle2)) {
+        //     if (gameState.ball.x + gameState.ballWidth >= gameState.paddle2.x) {
+        //         gameState.ball.velocityX *= -1;
+        //         ballHitPaddle = true;
+        //     }
+        // }
+    }
+
+    const resetingBall = (direction: 1, ballHitPaddle: boolean) => {
+        // if (gameState.ball.x < 0 && !ballHitPaddle) {
+        //     socket.emit('handleCollision2');
+        //     resetBall(1);
+        // }
+        // else if (gameState.ball.x + gameState.ballWidth > gameState.boardWidth && !ballHitPaddle) {
+        //     socket.emit('handleCollision1');
+        //     resetBall(-1);
+        // }
+    }
+    
+    const conditionHitBorder = () => {
+        // socket.emit('sendObject1', gameState.ball);
+        // console.log("x : ", gameState.paddle1.x);
+        // console.log("y : ", gameState.paddle1.y);
+        // const paddleData = { x: gameState.paddle1.x, y: gameState.paddle1.y };
+        // socket.emit('updatePaddle11', paddleData);
+
+        // if (gameState.ball.y <= 0 || gameState.ball.y + gameState.ball.height >= gameState.boardHeight) {
+        //     gameState.ball.velocityY = -gameState.ball.velocityY;
+        // }
+    }
+
+    const updateScorePlayer2 = (data: number) => {
+        gameState.player2Score = data;
+    }
+
+    const updateScorePlayer1 = (data: number) => {
+        gameState.player1Score = data;
+    }
+    
+    const displayScore = (context: CanvasRenderingContext2D) => {
+        context.font = "45px sans-serif";
+        context.fillText(gameState.player1Score.toString(), gameState.boardWidth / 5, 45);
+        context.fillText(gameState.player2Score.toString(), gameState.boardWidth * 4 / 5 - 45, 45);
+    }
+    
+    const displayLine = (context: CanvasRenderingContext2D, board: HTMLCanvasElement) => {
+    for (let i = 10; i < board.height; i += 25) {
+            context.fillRect(board.width / 2 - 10, i, 5, 5);
+        }
+    }
+
+    const createBoardGame = () => {
+        const board = document.getElementById("board") as HTMLCanvasElement | null;
+        const boardHeight = 500;
+        const boardWidth = 500;
+        if (board) {
+            board.height = boardHeight;
+            board.width = boardWidth;
+            return board;
+        }
+    }
+    
+    const createContextCanvas = (board: HTMLCanvasElement) => {
+        const context = board.getContext('2d');
+        if (context) {
+            canvasContextRef.current = context
+            return context;
+        }
+        return null;
+    }
+
+    const getCanvasTheContext = () => {
+        return canvasContextRef.current;
+    }
+
+    const renvoiBallData = (updateBallData: GameStateFD) => {
+        const context = getCanvasTheContext();
+        if (context) {
+            console.log("dans le context");
+            context.clearRect(0, 0, gameState.boardWidth, gameState.boardHeight);
+            updateBallData.ball.x += updateBallData.ball.velocityX;
+            updateBallData.ball.y += updateBallData.ball.velocityY;
+        }
+    }
+    
+    const initiateBallOLD = (ball: BallType, context: CanvasRenderingContext2D) => {
+        // gameState.ball.x += gameState.ball.velocityX;
+        // gameState.ball.y += gameState.ball.velocityY;
+
+        // context.fillStyle = "pink";
+        // context.beginPath();
+        // context.arc(gameState.ball.x, gameState.ball.y, gameState.ball.width / 2, 0, 2 * Math.PI);
+        // context.fill();
+    }
+
+    const drawBall = (context: CanvasRenderingContext2D) => {
+
+        context.fillStyle = "pink";
+        context.beginPath();
+        context.arc(gameState.ball.x, gameState.ball.y, gameState.ball.width / 2, 0, 2 * Math.PI);
+        context.fill();
+    }
+
+    const initiateBall = (ball: number, bally: number) => {
+        console.log("ini b => " , ball);
+        console.log("ini by => " , bally);
+        gameState.ball.x = ball;
+        gameState.ball.y = bally;
+    }
+
+    const drawPaddle1 = (context: CanvasRenderingContext2D) => {
+        context.fillRect(gameState.paddle1.x, gameState.paddle1.y, gameState.paddle1.width, gameState.paddle1.height);
+    }
+
+    const drawPaddle2 = (context: CanvasRenderingContext2D) => {
+        context.fillRect(gameState.paddle2.x, gameState.paddle2.y, gameState.paddle2.width, gameState.paddle2.height);
+    }
+
+    const initiatePaddle1 = (data: number) => {
+        gameState.paddle1.y = data;
+    }
+
+    const initiatePaddle2 = (data: number) => {
+        gameState.paddle2.y = data;
+    }
+
+    const toKnow = () => {
+        socket.emit('toKnow');
+    }
+
+    const update = () => {
+        const board = createBoardGame();
+        if (board) {
+            const context = createContextCanvas(board);
+            if (context ) {
+                context.fillStyle = "skyblue";
+                
+                // initiateBallOLD(gameState.ball, context);
+                drawPaddle1(context);
+                drawPaddle2(context);
+                drawBall(context);
+
+                // conditionHitBorder();
+                toKnow();
+                let ballHitPaddle = false;
+                // detectigBall(ballHitPaddle);
+                // resetingBall(1, ballHitPaddle);
+                displayScore(context);
+                displayLine(context, board);
+                
+            }
+        }
+        requestAnimationFrame(update);
+    };
+
+    const sendCanvasToServer = (ball: GameStateFD, context: CanvasRenderingContext2D) => {
+        socket.emit('sendCanvasToServer', ball, context);
+    }
+    
+    useEffect(() => {
+        update();
+
+        const handleConnect = () => {
+            console.log('Connected in START GAME!');
+            
+        }
+        socket.on('connect', handleConnect);
+        if (socket.connected) {
+            console.log(`je suis ${socket.id} dans game gate .tsx`);
+        }
+
+        socket.emit('handleInit1');
+        socket.emit('handleInit2');
+        socket.emit('handleInitBall');
+        
+        const userId = 1;
+        const makeMovePaddle1 = (newVelocityY: number) => {
+            console.log("velocity en recepton = ", newVelocityY);
+        }
+        const makeMovePaddle2 = (newVelocityY: number) => {
+            console.log("velocity en recepton = ", newVelocityY);
+        }
+        
+        const handleKeyDown = (event: KeyboardEvent) => {
+            
+            if (event.key === 'ArrowUp') {
+                if (userId === 1) {
+                    socket.emit('keyupPD1', { key: event.code })
+                        socket.on('paddle1Moved', (newVelocityY) => {
+                        makeMovePaddle1(newVelocityY);
+                    })
+                    console.log(`Arrow UP by ${userId}`);
+                    
+                } else if (userId === 2) {
+                    socket.emit('keyupPD2', { key: event.code })
+                    socket.on('paddle2Moved', (newVelocityY) => {
+                        makeMovePaddle2(newVelocityY);
+                    })
+                    console.log(`Arrow UP by ${userId}`);
+                }
+            }
+            else if (event.key === 'ArrowDown') {
+                if (userId === 1) {
+                    socket.emit('keydownPD1', { key: event.code })
+                    socket.on('paddle1Moved', (newVelocityY) => {
+                        makeMovePaddle1(newVelocityY);
+                    })
+                    console.log(`Arrow DOWN by ${userId}`);
+                } else if (userId === 2) {
+                    socket.emit('keydownPD2', { key: event.code })
+                    socket.on('paddle2Moved', (newVelocityY) => {
+                        makeMovePaddle2(newVelocityY);
+                    })
+                    console.log(`Arrow DOWN by ${userId}`);
+                }
+            }
+        }; 
+
+        const handleUpdatedResponse = (data: any) => {
+            console.log("Reponse du serveur :", data.note)
+            setServerMessage(data.note);
+        }
+        
+        const handleKeyPressedResponse = (data: any) => {
+            console.log("Reponse du serveur keypressed : ", data.message);
+            setAServerMessage(data.message);
+        }
+                
+        socket.on('updateBallDataToClientTHREE', (updateBallData) => {
+            // setBall(updateBallData);
+            renvoiBallData(updateBallData);
+        })
+
+        window.addEventListener('keydown', handleKeyDown);
+        socket.on('keyPressedResponse', handleKeyPressedResponse);
+        socket.on('PositionUpdatedInServer', handleUpdatedResponse);
+        socket.on('sendCanvasToServer', sendCanvasToServer);
+
+        //quand je reviens du serveur. le serveur renvoie :
+        socket.on('initplayer1', (newGameState) => {
+            initiatePaddle1(newGameState);
+        })
+
+        socket.on('initplayer2', (newGameState) => {
+            initiatePaddle2(newGameState);
+        })
+
+        socket.on('updatePlayer2', (newGameState) => {
+            updateScorePlayer2(newGameState);
+        })
+
+        socket.on('updatePlayer1', (newGameState) => {
+            updateScorePlayer1(newGameState);
+        })
+
+        socket.on('initBall', (ball: number, bally: number) => {
+            initiateBall(ball, bally);
+        })
+
+
+
+        return () => {
+            console.log("Unregistering events...");  
+            socket.off('connect');
+            window.removeEventListener('keydown', handleKeyDown);
+            socket.off('keyPressedResponse',handleKeyPressedResponse);
+            socket.off('PositionUpdatedInServer', handleUpdatedResponse);
+            socket.off('updatePaddle1');
+            socket.off('updatePaddle2');
+            socket.off('sendCanvasToServer', sendCanvasToServer);
+            socket.off('updateCanvasAfterSend');
+            socket.off('updateBallDataToClientTHREE');
+            socket.off('initplayer1');
+            socket.off('initplayer2');
+            socket.off('updatePlayer2');
+            socket.off('updatePlayer2');
+        }
+        
+    }, [update]);
+    
+    return (
+        <div className="game-container">
+            <canvas id="board"></canvas>
+        </div>
+  );
+}
+
+export default WebsocketSG;

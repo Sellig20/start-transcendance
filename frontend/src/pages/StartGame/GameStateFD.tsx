@@ -1,5 +1,5 @@
 
-export class GameStateBD {
+export class GameStateFD {
     boardWidth: number = 500;
     boardHeight: number = 500;
   
@@ -39,6 +39,7 @@ export class GameStateBD {
       color: "purple",
     };
   }
+  
   export interface PaddleType {
     x: number;
     y: number;
@@ -46,6 +47,7 @@ export class GameStateBD {
     height: number;
     velocityY: number;
   }
+
   export interface BallType {
     x: number,
     y: number,
@@ -55,4 +57,5 @@ export class GameStateBD {
     velocityY: number,
     color: string,
   }
+  
   
