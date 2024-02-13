@@ -5,7 +5,6 @@ import { AppModule } from './app.module';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { join } from 'path';
 
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -16,8 +15,6 @@ async function bootstrap() {
     .setDescription('unicorns only')
     .setVersion('1.0')
     .addServer('http://localhost:3001/', 'Home')
-    // .addServer('https://staging.yourapi.com/', 'Staging')
-    // .addServer('https://production.yourapi.com/', 'Production')
     .addTag('User')
     .addTag('Auth')
     .build();
@@ -25,9 +22,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api-docs', app, document);
 
-
   app.enableCors();
-
   
   app.useGlobalPipes(
     new ValidationPipe({

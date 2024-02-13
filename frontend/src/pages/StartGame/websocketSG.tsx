@@ -78,7 +78,6 @@ export const WebsocketSG = () => {
     const renvoiBallData = (updateBallData: GameStateFD) => {
         const context = getCanvasTheContext();
         if (context) {
-            console.log("dans le context");
             context.clearRect(0, 0, gameState.boardWidth, gameState.boardHeight);
             updateBallData.ball.x += updateBallData.ball.velocityX;
             updateBallData.ball.y += updateBallData.ball.velocityY;
@@ -86,10 +85,10 @@ export const WebsocketSG = () => {
     }
     
     const drawBall = (context: CanvasRenderingContext2D) => {
-
         context.fillStyle = "pink";
         context.beginPath();
-        context.arc(gameState.ball.x, gameState.ball.y, gameState.ball.width / 2, 0, 2 * Math.PI);
+        // context.arc(gameState.ball.x, gameState.ball.y, gameState.ball.width / 2, 0, 2 * Math.PI);
+        context.fillRect(gameState.ball.x, gameState.ball.y, gameState.ball.width, gameState.ball.height);
         context.fill();
     }
 
@@ -107,11 +106,15 @@ export const WebsocketSG = () => {
     }
 
     const drawPaddle1 = (context: CanvasRenderingContext2D) => {
+        context.beginPath();
         context.fillRect(gameState.paddle1.x, gameState.paddle1.y, gameState.paddle1.width, gameState.paddle1.height);
+        context.fill();
     }
 
     const drawPaddle2 = (context: CanvasRenderingContext2D) => {
+        context.beginPath();
         context.fillRect(gameState.paddle2.x, gameState.paddle2.y, gameState.paddle2.width, gameState.paddle2.height);
+        context.fill();
     }
 
     const initiatePaddle1 = (data: number) => {
