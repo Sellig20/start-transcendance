@@ -3,7 +3,7 @@ import React from 'react';
 import { WebsocketContext } from "../../contexts/WebsocketContext"
 import { GameStateFD } from "./GameStateFD";
 
-export const WebsocketSG = () => {
+export const WebsocketSecondG = () => {
 
     const [serverMessage, setServerMessage] = useState('');
     const [serverAMessage, setAServerMessage] = useState('');
@@ -30,13 +30,13 @@ export const WebsocketSG = () => {
     }
 
     const createBoardGame = () => {
-        const board = document.getElementById("board") as HTMLCanvasElement | null;
+        const board2 = document.getElementById("board2") as HTMLCanvasElement | null;
         const boardHeight = 500;
         const boardWidth = 500;
-        if (board) {
-            board.height = boardHeight;
-            board.width = boardWidth;
-            return board;
+        if (board2) {
+            board2.height = boardHeight;
+            board2.width = boardWidth;
+            return board2;
         }
     }
     
@@ -63,7 +63,7 @@ export const WebsocketSG = () => {
     }
     
     const drawBall = (context: CanvasRenderingContext2D) => {
-        context.fillStyle = "pink";
+        context.fillStyle = "blue";
         context.beginPath();
         // context.arc(gameState.ball.x, gameState.ball.y, gameState.ball.width / 2, 0, 2 * Math.PI);
         context.fillRect(gameState.ball.x, gameState.ball.y, gameState.ball.width, gameState.ball.height);
@@ -71,7 +71,7 @@ export const WebsocketSG = () => {
     }
     
     const drawPaddle1 = (context: CanvasRenderingContext2D) => {
-        context.fillStyle = "pink";
+        context.fillStyle = "red";
 
         context.beginPath();
         context.fillRect(gameState.paddle1.x, gameState.paddle1.y, gameState.paddle1.width, gameState.paddle1.height);
@@ -79,6 +79,8 @@ export const WebsocketSG = () => {
     }
 
     const drawPaddle2 = (context: CanvasRenderingContext2D) => {
+        context.fillStyle = "red";
+
         context.beginPath();
         context.fillRect(gameState.paddle2.x, gameState.paddle2.y, gameState.paddle2.width, gameState.paddle2.height);
         context.fill();
@@ -127,26 +129,54 @@ export const WebsocketSG = () => {
         gameState.currentLevel = updatedLevel;
     }
 
+    let time = 0;
     const update = () => {
-        const board = createBoardGame();
-        if (board) {
-            const context = createContextCanvas(board);
+        const board2 = createBoardGame();
+        if (board2) {
+            const context = createContextCanvas(board2);
             if (context) {
                 if (gameState.player1Winner == true || gameState.player2Winner == true) {
                     console.log("FIN DE JEU");
-                    displayEndGame(context, board);
+                    displayEndGame(context, board2);
                     return ;
                 }
+                const waveColors = ['#ff6347', '#6495ed', '#00ced1', '#ff69b4', '#32cd32'];
                 context.fillStyle = "skyblue";
+                drawWaves(time, context, waveColors);
                 drawPaddle1(context);
                 drawPaddle2(context);
                 drawBall(context);
                 displayScore(context);
-                displayLine(context, board);
+                displayLine(context, board2);
+                time += 0.5;
+                // context.clearRect(0, 0, gameState.boardWidth, gameState.boardHeight);
             }
         }
         requestAnimationFrame(update);
     };
+
+    const drawWaves = (time: number, context: CanvasRenderingContext2D, waveColors: string[]) => {
+
+      for (let i = 0; i < waveColors.length; i++) {
+        const offset = i * 20;
+        context.fillStyle = waveColors[i];
+        context.beginPath();
+
+        for (let x = 0; x < gameState.boardWidth; x += 10) {
+          const y = Math.sin((x + time + offset) * 0.01) * 50 + gameState.boardHeight / 2;
+          context.lineTo(x, y);
+        }
+        
+        context.lineTo(gameState.boardWidth, gameState.boardHeight);
+        context.lineTo(0, gameState.boardHeight);
+        context.closePath();
+        context.fill();
+      }
+    };
+
+    const gameLoop = () => {
+        
+      };
 
     const sendCanvasToServer = (ball: GameStateFD, context: CanvasRenderingContext2D) => {
         socket.emit('sendCanvasToServer', ball, context);
@@ -287,10 +317,15 @@ export const WebsocketSG = () => {
     }, [update]);
     
     return (
-        <div className="game-container">
-            <canvas id="board"></canvas>
-        </div>
-  );
+        // <div className="game-container2">
+        //     <canvas id="board2"></canvas>
+        // </div>
+        <div>
+        <canvas id="board2" style={{ 
+          display: 'block', 
+          margin: 0, 
+          overflow: 'hidden' }} />;
+        </div>);
 }
 
-export default WebsocketSG;
+export default WebsocketSecondG;

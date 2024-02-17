@@ -1,0 +1,14 @@
+body {
+  text-align: center;
+}
+
+#board2 {
+  font-family: Arial;
+  background-color: rgb(219, 29, 156);
+  border-top: 5px solid #6495ed;
+  border-bottom: 5px solid #6495ed;
+}
+
+#paddle1 {
+  fill: #ff0000;
+}

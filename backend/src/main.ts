@@ -14,7 +14,7 @@ async function bootstrap() {
     .setTitle('the wonderful world of juana')
     .setDescription('unicorns only')
     .setVersion('1.0')
-    .addServer('http://localhost:3001/', 'Home')
+    // .addServer('http://localhost:3001/', 'Home')
     .addTag('User')
     .addTag('Auth')
     .build();

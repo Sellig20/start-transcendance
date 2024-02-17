@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "react-scripts start && webpack-dev-server --open",
-    "build": "react-scripts build && tsc && copyfiles -u 1 backend/dist/Game/Ball.js frontend/dist/ && webpack",
+    "build": "react-scripts build && tsc",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

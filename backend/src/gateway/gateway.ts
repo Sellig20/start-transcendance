@@ -62,37 +62,71 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection<Socket>, OnG
         this.server.emit('paddle2Moved', this.gameState.paddle1.velocityY);
     }
 
+    checkLevelChangeVelocity() {
+        if (this.gameState.player1Score >= 0 ||
+            this.gameState.player1Score <= 2) {
+            // console.log("niveau1");
+        }
+        if (this.gameState.player1Score === 3) {
+            // console.log("niveau 2");
+            this.gameState.currentLevel = 2;
+            this.server.emit('updateLevel', this.gameState.currentLevel);
+        }
+        else if (this.gameState.player1Score === 6) {
+            // console.log("niveau 3");
+            this.gameState.currentLevel = 3;
+            this.server.emit('updateLevel', this.gameState.currentLevel);
+        }
+        else if (this.gameState.player1Score === 9) {
+            // console.log("niveau 4");
+            this.gameState.currentLevel = 4;
+            this.server.emit('updateLevel', this.gameState.currentLevel);
+        }
+    }
+
     @SubscribeMessage('handleCollision2')
     handleCollisionWithLeftBorder() {
         this.gameState.player2Score += 1;
+        this.maxScore();
         // console.log("player 2 score =>", this.gameState.player2Score)
-        this.server.emit('updatePlayer2', this.gameState.player2Score );
+        this.server.emit('updatePlayer2', this.gameState.player2Score);
     }
 
     @SubscribeMessage('handleCollision1')
     handleCollisionWithRightBorder() {
         this.gameState.player1Score += 1;
+        this.maxScore();
         // console.log("player 1 score =>", this.gameState.player1Score)
-        this.server.emit('updatePlayer1', this.gameState.player1Score );
+        this.server.emit('updatePlayer1', this.gameState.player1Score);
     }
 
     @SubscribeMessage('handleInit1')
     handleInitialisationPlayer1() {
         this.gameState.paddle1.y += this.gameState.paddle1.velocityY;
         this.gameState.paddle1.y = Math.max(0, Math.min(this.gameState.boardHeight - this.gameState.paddle1.height, this.gameState.paddle1.y));
-        this.server.emit('initplayer1', this.gameState.paddle1.y)
     }
-
+    
     @SubscribeMessage('handleInit2')
     handleInitialisationPlayer2() {
         this.gameState.paddle2.y += this.gameState.paddle2.velocityY;
         this.gameState.paddle2.y = Math.max(0, Math.min(this.gameState.boardHeight - this.gameState.paddle2.height, this.gameState.paddle2.y));
-        this.server.emit('initplayer2', this.gameState.paddle2.y)
+        
     }
 
-    updateGame() {
-        this.gameState.ball.x += this.gameState.ball.velocityX;
-        this.gameState.ball.y += this.gameState.ball.velocityY;
+    maxScore() {
+        if (this.gameState.player1Score >= 5) {
+            this.gameState.player1Winner = true;
+            this.server.emit('winnerIs', this.gameState.player1Winner, this.gameState.idPlayer1);
+        }
+        else if (this.gameState.player2Score >= 5) {
+            this.gameState.player2Winner = true;
+            this.server.emit('winnerIs', this.gameState.player2Winner, this.gameState.idPlayer2);
+        }
+    }
+
+    initialisationBallMov() {
+        this.gameState.ball.x += (this.gameState.ball.velocityX * this.gameState.currentLevel);
+        this.gameState.ball.y += (this.gameState.ball.velocityY * this.gameState.currentLevel);
     }
 
     detect(a: any, b: any) {
@@ -109,7 +143,7 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection<Socket>, OnG
         this.gameState.ball.height = this.gameState.ballHeight; // Replace la balle au centre verticalement
         this.gameState.ball.velocityX = direction;
         this.gameState.ball.velocityY = 2;
-        this.gameState.ball.color = "red"
+        this.gameState.ball.color = "red";
     }
 
     ScoreAndResetBall(direction: number, ballHitPaddle: boolean) {
@@ -147,13 +181,18 @@ export class MyGateway implements OnModuleInit, OnGatewayConnection<Socket>, OnG
 
     startGameLoop(): void {
         setInterval(() => {
-        this.updateGame();
+        this.handleInitialisationPlayer1();
+        this.handleInitialisationPlayer2();
+        this.initialisationBallMov();
+        this.checkLevelChangeVelocity();
         this.detectingBorder();
         this.server.emit('borderCollision', this.gameState.ball.velocityY)
         let ballHitPaddle = false;
         this.detectingBallAgainstPaddle(ballHitPaddle);
         this.server.emit('collisionBall', this.gameState.ball.velocityX)
         this.ScoreAndResetBall(1, ballHitPaddle);
+        this.server.emit('initplayer1', this.gameState.paddle1.y)
+        this.server.emit('initplayer2', this.gameState.paddle2.y)
         this.server.emit('initBall', this.gameState.ball.x, this.gameState.ball.y)
         }, 16); // 16 ms (environ 60 FPS)
       }

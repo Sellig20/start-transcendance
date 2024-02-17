@@ -1,25 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './index.css';
 
-interface PaddleProps {
-  position: number;
-}
-
-const Paddle: React.FC<PaddleProps> = ({ position }) => (
-  <div className="paddle" style={{ left:position }}>
-    Paddle
-  </div>
-)
-
-interface StartGameProps {
-  size: number;
-}
-
-const StartGame: React.FC<StartGameProps> = ({ size }) => {
+const StartGame: React.FC = () => {
 
   return (
       <nav>
-          <h1>StartGame JEUUUUUUUU</h1>
+          <h1>PONG GAME</h1>
       </nav>
   )
 }

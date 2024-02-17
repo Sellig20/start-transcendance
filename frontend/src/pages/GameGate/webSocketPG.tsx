@@ -29,10 +29,7 @@ export const WebSocketPG = () => {
 
     return (
         <div>
-            <div>
-                <h1>Websocket Component</h1>
-                
-            </div>
+            
         </div>
     )
 }

@@ -13,6 +13,14 @@ export class GameStateBD {
     player1Score: number = 0;
     player2Score: number = 0;
   
+    player1Winner: boolean = false;
+    player2Winner: boolean = false;
+
+    idPlayer1: string = "one";
+    idPlayer2: string = "two";
+
+    currentLevel: number = 1;
+    
     paddle1: PaddleType = {
       x: 10,
       y: this.boardHeight / 2,
